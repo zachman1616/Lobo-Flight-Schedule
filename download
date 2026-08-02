@@ -1,0 +1,7 @@
+# Copy this to .env and fill in values
+PORT=3000
+SESSION_SECRET=change-this-to-a-long-random-string-in-production
+NODE_ENV=production
+
+# Optional: set to true only during initial setup if you need to re-seed
+# SEED_DB=false
