@@ -1368,7 +1368,7 @@ async function performSignup(e) {
   }
 }
 
-function showManageUsersModal() {
+async function showManageUsersModal() {
   if (!loggedInUser || loggedInUser.role !== 'admin') {
     alert('Admin access only.');
     return;
@@ -1377,36 +1377,56 @@ function showManageUsersModal() {
   const list = document.getElementById('pending-users-list');
   const noPending = document.getElementById('no-pending');
 
-  list.innerHTML = '';
+  list.innerHTML = '<div class="text-gray-400 text-xs">Loading...</div>';
   noPending.classList.add('hidden');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
 
-  const pending = authUsers.filter(u => u.status === 'pending');
-
-  if (pending.length === 0) {
-    noPending.classList.remove('hidden');
-  } else {
+  try {
+    const pending = await API.getPendingUsers();
+    list.innerHTML = '';
+    if (!pending.length) {
+      noPending.classList.remove('hidden');
+      return;
+    }
     pending.forEach(user => {
       const div = document.createElement('div');
-      div.className = 'flex justify-between items-center bg-gray-50 p-2 rounded text-xs';
-      const displayName = user.rank && user.firstName && user.lastName ? `${user.rank} ${user.firstName} ${user.lastName}` : user.username;
+      div.className = 'flex justify-between items-center bg-gray-50 p-2 rounded text-xs gap-2';
+      const displayName = user.rank && user.first_name
+        ? `${user.rank} ${user.first_name} ${user.last_name || ''}`.trim()
+        : user.username;
       div.innerHTML = `
-        <div>
-          <strong>${displayName}</strong> (${user.email})<br>
-          <span class="text-gray-500">Role: ${user.role}</span>
+        <div class="min-w-0">
+          <strong>${displayName}</strong> (${user.email})
         </div>
-        <button class="px-2 py-1 bg-green-600 text-white text-xs rounded">Approve</button>
+        <div class="flex gap-1 shrink-0">
+          <button class="px-2 py-1 bg-green-600 text-white rounded approve-btn">Approve</button>
+          <button class="px-2 py-1 bg-red-600 text-white rounded reject-btn">Reject</button>
+          <button class="px-2 py-1 bg-gray-600 text-white rounded reset-btn">Reset PW</button>
+        </div>
       `;
-      const btn = div.querySelector('button');
-      btn.onclick = () => {
-        approveUser(user.id);
-        showManageUsersModal(); // refresh
+      div.querySelector('.approve-btn').onclick = async () => {
+        await API.setUserStatus(user.id, 'approved');
+        alert('Approved ' + displayName);
+        showManageUsersModal();
+        if (typeof renderAll === 'function') renderAll();
+      };
+      div.querySelector('.reject-btn').onclick = async () => {
+        await API.setUserStatus(user.id, 'rejected');
+        alert('Rejected ' + displayName);
+        showManageUsersModal();
+      };
+      div.querySelector('.reset-btn').onclick = async () => {
+        const pw = prompt('New password for ' + displayName + ' (min 6 chars):');
+        if (!pw || pw.length < 6) return;
+        await API.setUserPassword(user.id, pw);
+        alert('Password reset for ' + displayName);
       };
       list.appendChild(div);
     });
+  } catch (err) {
+    list.innerHTML = '<div class="text-red-600 text-xs">' + err.message + '</div>';
   }
-
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
 }
 
 function hideManageUsersModal() {
