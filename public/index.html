@@ -1435,7 +1435,9 @@ function hideManageUsersModal() {
   modal.classList.add('hidden');
 }
 
-function approveUser(userId) {
+function approveUser() {
+  // handled inside showManageUsersModal via API
+} {
   const user = authUsers.find(u => u.id == userId);
   if (user) {
     user.status = 'approved';
