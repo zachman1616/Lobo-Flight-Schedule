@@ -2956,13 +2956,31 @@ CPT David Ruiz,2155,680,true,100,Complete`;
 
         /** Build name list from demo crew + approved sign-up accounts */
         function getCrewPeopleForSelects() {
-            const byName = new Map();
+  const byName = new Map();
+  (crew || []).forEach(member => {
+    if (!member.name) return;
+    const rank = member.name.trim().split(/\s+/)[0];
+    byName.set(member.name, { name: member.name, rank });
+  });
+  (window._approvedUsersCache || []).forEach(u => {
+    if (!u.rank || !u.first_name) return;
+    const name = `${u.rank} ${u.first_name} ${u.last_name || ''}`.trim();
+    byName.set(name, { name, rank: u.rank });
+  });
+  return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
+}
 
-            crew.forEach(member => {
-                if (!member.name) return;
-                const rank = member.name.trim().split(/\s+/)[0];
-                byName.set(member.name, { name: member.name, rank });
-            });
+async function refreshApprovedUsersCache() {
+  try {
+    if (!loggedInUser) {
+      window._approvedUsersCache = [];
+      return;
+    }
+    window._approvedUsersCache = await API.getApprovedUsers();
+  } catch (e) {
+    window._approvedUsersCache = window._approvedUsersCache || [];
+  }
+}
 
             const liveUsers = JSON.parse(localStorage.getItem('authUsers')) || authUsers || [];
             liveUsers.forEach(u => {
