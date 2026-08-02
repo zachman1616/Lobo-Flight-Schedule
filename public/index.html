@@ -1003,11 +1003,13 @@
                     <label class="text-xs block text-gray-600">Password</label>
                     <input type="password" id="login-password" class="border w-full rounded p-1.5 text-sm" placeholder="test123">
                 </div>
-            </div>
-            <div class="p-3 bg-gray-50 border-t flex gap-2 justify-end text-xs">
-                <button onclick="hideLoginModal()" class="px-4 py-1 border rounded">Cancel</button>
-                <button onclick="performLogin()" class="px-4 py-1 bg-[#0078d4] text-white rounded">Login</button>
-            </div>
+            <div class="p-3 bg-gray-50 border-t flex flex-col gap-2 text-xs">
+    <p class="text-gray-500 text-center">Forgot password? Contact an admin to reset it.</p>
+    <div class="flex gap-2 justify-end">
+        <button onclick="hideLoginModal()" class="px-4 py-1 border rounded">Cancel</button>
+        <button onclick="performLogin()" class="px-4 py-1 bg-[#0078d4] text-white rounded">Login</button>
+    </div>
+</div>
         </div>
     </div>
 
