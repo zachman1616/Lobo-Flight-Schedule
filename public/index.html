@@ -2969,17 +2969,6 @@ async function refreshApprovedUsersCache() {
   }
 }
 
-            const liveUsers = JSON.parse(localStorage.getItem('authUsers')) || authUsers || [];
-            liveUsers.forEach(u => {
-                if (u.isRecovery) return;
-                if (u.status && u.status !== 'approved') return;
-                if (!u.rank || !u.firstName) return;
-                const name = `${u.rank} ${u.firstName} ${u.lastName || ''}`.trim();
-                byName.set(name, { name, rank: u.rank });
-            });
-
-            return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
-        }
 
         function namesForDuty(duty) {
             const people = getCrewPeopleForSelects();
