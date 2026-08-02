@@ -265,28 +265,6 @@ app.delete('/api/users/:id', requireAdmin, (req, res) => {
   if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
   res.json({ message: 'User deleted' });
 });
-  // Prevent removing the last admin
-  if (role === 'user') {
-    const adminCount = db.prepare('SELECT COUNT(*) as c FROM users WHERE role = \'admin\' AND status = \'approved\'').get().c;
-    const target = db.prepare('SELECT role FROM users WHERE id = ?').get(req.params.id);
-    if (adminCount <= 1 && target?.role === 'admin') {
-      return res.status(400).json({ error: 'Cannot demote the last admin' });
-    }
-  }
-  const result = db.prepare('UPDATE users SET role = ?, updated_at = datetime(\'now\') WHERE id = ?')
-    .run(role, req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
-  res.json({ message: 'Role updated', role });
-});
-
-app.delete('/api/users/:id', requireAdmin, (req, res) => {
-  if (req.params.id === req.session.userId) {
-    return res.status(400).json({ error: 'Cannot delete your own account' });
-  }
-  const result = db.prepare('DELETE FROM users WHERE id = ?').run(req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
-  res.json({ message: 'User deleted' });
-});
 
 // ========== AIRCRAFT ==========
 app.get('/api/aircraft', requireAuth, (req, res) => {
