@@ -1322,6 +1322,7 @@ async function performLogin() {
     currentUserId = user.id;
     appView = 'home';
     updateAuthUI();
+    await refreshApprovedUsersCache();
     showHomePage();
     renderAll();
   } catch (err) {
