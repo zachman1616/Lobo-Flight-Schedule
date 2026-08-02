@@ -186,6 +186,17 @@ app.get('/api/auth/me', (req, res) => {
 });
 
 // ========== USER MANAGEMENT (Admin) ==========
+// ========== USER MANAGEMENT ==========
+// Approved users list (any logged-in user — for crew dropdowns)
+app.get('/api/users/approved', requireAuth, (req, res) => {
+  const users = db.prepare(`
+    SELECT id, username, email, role, rank, first_name, last_name, status
+    FROM users WHERE status = 'approved'
+    ORDER BY rank, last_name, first_name
+  `).all();
+  res.json(users);
+});
+
 app.get('/api/users', requireAdmin, (req, res) => {
   const users = db.prepare(`
     SELECT id, username, email, role, rank, first_name, last_name, status, created_at
@@ -220,6 +231,40 @@ app.patch('/api/users/:id/role', requireAdmin, (req, res) => {
   if (!['user', 'admin'].includes(role)) {
     return res.status(400).json({ error: 'Invalid role' });
   }
+  if (role === 'user') {
+    const adminCount = db.prepare('SELECT COUNT(*) as c FROM users WHERE role = \'admin\' AND status = \'approved\'').get().c;
+    const target = db.prepare('SELECT role FROM users WHERE id = ?').get(req.params.id);
+    if (adminCount <= 1 && target?.role === 'admin') {
+      return res.status(400).json({ error: 'Cannot demote the last admin' });
+    }
+  }
+  const result = db.prepare('UPDATE users SET role = ?, updated_at = datetime(\'now\') WHERE id = ?')
+    .run(role, req.params.id);
+  if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
+  res.json({ message: 'Role updated', role });
+});
+
+// Admin resets a user's password (Option B — no email yet)
+app.patch('/api/users/:id/password', requireAdmin, (req, res) => {
+  const { password } = req.body;
+  if (!password || password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters' });
+  }
+  const hash = bcrypt.hashSync(password, 12);
+  const result = db.prepare('UPDATE users SET password_hash = ?, updated_at = datetime(\'now\') WHERE id = ?')
+    .run(hash, req.params.id);
+  if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
+  res.json({ message: 'Password updated' });
+});
+
+app.delete('/api/users/:id', requireAdmin, (req, res) => {
+  if (req.params.id === req.session.userId) {
+    return res.status(400).json({ error: 'Cannot delete your own account' });
+  }
+  const result = db.prepare('DELETE FROM users WHERE id = ?').run(req.params.id);
+  if (result.changes === 0) return res.status(404).json({ error: 'User not found' });
+  res.json({ message: 'User deleted' });
+});
   // Prevent removing the last admin
   if (role === 'user') {
     const adminCount = db.prepare('SELECT COUNT(*) as c FROM users WHERE role = \'admin\' AND status = \'approved\'').get().c;
