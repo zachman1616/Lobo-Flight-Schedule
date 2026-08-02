@@ -1349,18 +1349,25 @@ async function performSignup(e) {
   const lastName = document.getElementById('signup-lastname').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
-  const role = document.getElementById('signup-role').value;
 
   if (!rank || !firstName || !lastName || !email || !password) {
     alert('Please fill out Rank, First Name, Last Name, Email and Password.');
     return;
   }
 
-  // Use rank + first + last as the "username" for auth
   const username = `${rank} ${firstName} ${lastName}`;
 
   try {
-    await signupUser(username, email, password, role, rank, firstName, lastName);
+    await signupUser(username, email, password, 'user', rank, firstName, lastName);
+    hideSignupModal();
+    alert('Account created successfully! Awaiting admin approval before you can access the schedule.');
+    setTimeout(showLoginModal, 300);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+  try {
+    await signupUser(username, email, password, user, rank, firstName, lastName);
     hideSignupModal();
     alert('Account created successfully! Awaiting admin approval before you can access the schedule.');
     setTimeout(showLoginModal, 300);
