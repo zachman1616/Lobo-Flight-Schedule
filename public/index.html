@@ -1436,24 +1436,10 @@ function hideManageUsersModal() {
   modal.classList.add('hidden');
 }
 
+
 function approveUser() {
   // handled inside showManageUsersModal via API
-} {
-  const user = authUsers.find(u => u.id == userId);
-  if (user) {
-    user.status = 'approved';
-    localStorage.setItem('authUsers', JSON.stringify(authUsers));
-    alert(`Approved ${user.username}`);
-    // If the approved user is currently logged in (edge case), refresh UI
-    if (loggedInUser && loggedInUser.id == userId) {
-      loggedInUser = user;
-      localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
-    }
-    updateAuthUI();  // refresh dropdown for admins
-    renderAll();
-  }
 }
-
         let editingFlightId = null;
         let currentFlightIdForDetail = null;
         let editingAircraftIdx = null;
