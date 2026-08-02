@@ -1125,10 +1125,12 @@ const API = {
   updateFlight: (id, flight) => API.request(`/api/flights/${id}`, { method: 'PUT', body: JSON.stringify(flight) }),
   deleteFlight: (id) => API.request(`/api/flights/${id}`, { method: 'DELETE' }),
   getAircraft: () => API.request('/api/aircraft'),
-  getUsers: () => API.request('/api/users'),
+    getUsers: () => API.request('/api/users'),
+  getApprovedUsers: () => API.request('/api/users/approved'),
   getPendingUsers: () => API.request('/api/users/pending'),
   setUserStatus: (id, status) => API.request(`/api/users/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
-  setUserRole: (id, role) => API.request(`/api/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) })
+  setUserRole: (id, role) => API.request(`/api/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) }),
+  setUserPassword: (id, password) => API.request(`/api/users/${id}/password`, { method: 'PATCH', body: JSON.stringify({ password }) })
 };
 
 // Old localStorage seeding removed — accounts now live in the server database.
