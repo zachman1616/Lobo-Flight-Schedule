@@ -472,9 +472,11 @@
                 <div class="text-right leading-tight">
                     <div id="header-user" class="text-xs font-semibold">WO1 Cunha</div>
                 </div>
-                <div class="w-7 h-7 bg-white/30 rounded-full flex items-center justify-center">
+                      <button type="button" id="profile-btn" onclick="showProfileModal()"
+                        class="w-7 h-7 bg-white/30 rounded-full flex items-center justify-center hover:bg-white/50 disabled:opacity-40 disabled:cursor-not-allowed"
+                        disabled title="Log in to view account">
                     <i class="fa-solid fa-user text-xs"></i>
-                </div>
+                </button>
                 <button id="login-btn" onclick="showLoginModal()" 
                         class="text-xs px-2 py-1 bg-white/20 hover:bg-white/30 rounded">Login</button>
                 <button id="logout-btn" onclick="logoutUser()" 
