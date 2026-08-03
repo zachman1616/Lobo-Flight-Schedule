@@ -1354,7 +1354,53 @@ function hidePendingMessage() {
   const msg = document.getElementById('pending-approval-msg');
   if (msg) msg.style.display = 'none';
 }
+function showProfileModal() {
+  if (!loggedInUser) {
+    showLoginModal();
+    return;
+  }
+  document.getElementById('profile-rank').value = loggedInUser.rank || 'WO1';
+  document.getElementById('profile-firstname').value = loggedInUser.firstName || '';
+  document.getElementById('profile-lastname').value = loggedInUser.lastName || '';
+  document.getElementById('profile-email').value = loggedInUser.email || '';
+  document.getElementById('profile-status').value = loggedInUser.status || '';
+  document.getElementById('profile-role').value = loggedInUser.role || '';
+  document.getElementById('profile-password').value = '';
+  const modal = document.getElementById('profile-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
 
+function hideProfileModal() {
+  const modal = document.getElementById('profile-modal');
+  modal.classList.remove('flex');
+  modal.classList.add('hidden');
+}
+
+async function saveProfile(e) {
+  e.preventDefault();
+  const rank = document.getElementById('profile-rank').value;
+  const firstName = document.getElementById('profile-firstname').value.trim();
+  const lastName = document.getElementById('profile-lastname').value.trim();
+  const email = document.getElementById('profile-email').value.trim();
+  const password = document.getElementById('profile-password').value;
+  if (!rank || !firstName || !lastName || !email) {
+    alert('Please fill Rank, First Name, Last Name, and Email.');
+    return;
+  }
+  try {
+    const body = { rank, firstName, lastName, email };
+    if (password && password.length >= 6) body.password = password;
+    const updated = await API.updateProfile(body);
+    loggedInUser = { ...loggedInUser, ...updated };
+    hideProfileModal();
+    updateAuthUI();
+    await refreshApprovedUsersCache();
+    alert('Account updated.');
+  } catch (err) {
+    alert(err.message);
+  }
+}
 function showLoginModal() {
   const modal = document.getElementById('login-modal');
   modal.classList.remove('hidden');
