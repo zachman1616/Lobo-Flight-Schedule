@@ -1459,6 +1459,12 @@ async function showManageUsersModal() {
     list.innerHTML = '<div class="text-red-600 text-xs">' + err.message + '</div>';
   }
 }
+function hideManageUsersModal() {
+  const modal = document.getElementById('manage-users-modal');
+  modal.classList.remove('flex');
+  modal.classList.add('hidden');
+}
+
 function approveUser() {
   // handled inside showManageUsersModal via API
 }
