@@ -1077,7 +1077,62 @@
             </form>
         </div>
     </div>
-
+    <!-- Profile / My Account Modal -->
+    <div id="profile-modal" onclick="if (event.target.id==='profile-modal') hideProfileModal()"
+         class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[200]">
+        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-sm rounded border shadow-xl modal">
+            <div class="px-4 py-2 border-b font-semibold bg-gray-50 flex items-center justify-between">
+                <span>My Account</span>
+                <button type="button" onclick="hideProfileModal()" class="text-lg leading-none text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <form id="profile-form" onsubmit="saveProfile(event)">
+                <div class="p-4 space-y-3 text-sm">
+                    <div>
+                        <label class="text-xs block text-gray-600">Rank</label>
+                        <select id="profile-rank" class="border w-full rounded p-1.5 text-sm" required>
+                            <option value="2LT">2LT</option><option value="1LT">1LT</option>
+                            <option value="CPT">CPT</option><option value="MAJ">MAJ</option>
+                            <option value="WO1">WO1</option><option value="CW2">CW2</option>
+                            <option value="CW3">CW3</option><option value="CW4">CW4</option>
+                            <option value="CW5">CW5</option><option value="PVT">PVT</option>
+                            <option value="PV2">PV2</option><option value="PFC">PFC</option>
+                            <option value="SPC">SPC</option><option value="SGT">SGT</option>
+                            <option value="SSG">SSG</option><option value="SFC">SFC</option>
+                            <option value="1SG">1SG</option><option value="MSG">MSG</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">First Name</label>
+                        <input type="text" id="profile-firstname" class="border w-full rounded p-1.5 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">Last Name</label>
+                        <input type="text" id="profile-lastname" class="border w-full rounded p-1.5 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">Email</label>
+                        <input type="email" id="profile-email" class="border w-full rounded p-1.5 text-sm" required>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">Status</label>
+                        <input type="text" id="profile-status" class="border w-full rounded p-1.5 text-sm bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">Role</label>
+                        <input type="text" id="profile-role" class="border w-full rounded p-1.5 text-sm bg-gray-100" readonly>
+                    </div>
+                    <div>
+                        <label class="text-xs block text-gray-600">New password (optional)</label>
+                        <input type="password" id="profile-password" class="border w-full rounded p-1.5 text-sm" minlength="6" placeholder="Leave blank to keep current">
+                    </div>
+                </div>
+                <div class="p-3 bg-gray-50 border-t flex gap-2 justify-end text-xs">
+                    <button type="button" onclick="hideProfileModal()" class="px-4 py-1 border rounded">Cancel</button>
+                    <button type="submit" class="px-4 py-1 bg-[#4CAF50] text-white rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Manage Users Modal (Admin only) -->
     <div id="manage-users-modal" onclick="if (event.target.id==='manage-users-modal') hideManageUsersModal()" 
          class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[200]">
