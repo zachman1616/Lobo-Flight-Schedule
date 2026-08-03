@@ -1134,10 +1134,10 @@ const API = {
   getPendingUsers: () => API.request('/api/users/pending'),
   setUserStatus: (id, status) => API.request(`/api/users/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   setUserRole: (id, role) => API.request(`/api/users/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role }) }),
-  setUserPassword: (id, password) => API.request(`/api/users/${id}/password`, { method: 'PATCH', body: JSON.stringify({ password }) 
-  deleteUser: (id) => API.request(`/api/users/${id}`, { method: 'DELETE' }),
-};https://github.com/zachman1616/Lobo-Flight-Schedule/tree/main
-
+    setUserPassword: (id, password) => API.request(`/api/users/${id}/password`, { method: 'PATCH', body: JSON.stringify({ password }) }),
+  deleteUser: (id) => API.request(`/api/users/${id}`, { method: 'DELETE' })
+};
+        
 // Old localStorage seeding removed — accounts now live in the server database.
 // Initial admins are created by the backend on first run:
 //   Username: RECOVERY   Password: RECOVER2026
