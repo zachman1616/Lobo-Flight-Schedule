@@ -986,33 +986,37 @@
         </div>
     </div>
 
-    <!-- Login Modal -->
-    <div id="login-modal" onclick="if (event.target.id==='login-modal') hideLoginModal()" 
-         class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[200]">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-sm rounded border shadow-xl modal">
-            <div class="px-4 py-2 border-b font-semibold bg-gray-50 flex items-center justify-between">
-                <span>Login</span>
-                <button onclick="hideLoginModal()" class="text-lg leading-none text-gray-400 hover:text-gray-600">×</button>
-            </div>
-            <div class="p-4 space-y-3 text-sm">
-                <div>
-                    <label class="text-xs block text-gray-600">Username or Email</label>
-                    <input type="text" id="login-username" class="border w-full rounded p-1.5 text-sm" placeholder="testuser or email">
-                </div>
-                <div>
-                    <label class="text-xs block text-gray-600">Password</label>
-                    <input type="password" id="login-password" class="border w-full rounded p-1.5 text-sm" placeholder="test123">
-                </div>
-            <div class="p-3 bg-gray-50 border-t flex flex-col gap-2 text-xs">
-    <p class="text-gray-500 text-center">Forgot password? Contact an admin to reset it.</p>
-    <div class="flex gap-2 justify-end">
-        <button onclick="hideLoginModal()" class="px-4 py-1 border rounded">Cancel</button>
-        <button onclick="performLogin()" class="px-4 py-1 bg-[#0078d4] text-white rounded">Login</button>
-    </div>
-</div>
-        </div>
+         <!-- Login Modal -->
+<div id="login-modal" onclick="if (event.target.id==='login-modal') hideLoginModal()"
+     class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[200]">
+  <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-sm rounded border shadow-xl modal">
+    <div class="px-4 py-2 border-b font-semibold bg-gray-50 flex items-center justify-between">
+      <span>Login</span>
+      <button onclick="hideLoginModal()" class="text-lg leading-none text-gray-400 hover:text-gray-600">×</button>
     </div>
 
+    <form onsubmit="event.preventDefault(); performLogin();">
+      <div class="p-4 space-y-3 text-sm">
+        <div>
+          <label class="text-xs block text-gray-600">Username or Email</label>
+          <input type="text" id="login-username" class="border w-full rounded p-1.5 text-sm" placeholder="Username or email">
+        </div>
+        <div>
+          <label class="text-xs block text-gray-600">Password</label>
+          <input type="password" id="login-password" class="border w-full rounded p-1.5 text-sm" placeholder="Password">
+        </div>
+      </div>
+
+      <div class="p-3 bg-gray-50 border-t flex flex-col gap-2 text-xs">
+        <p class="text-gray-500 text-center">Forgot password? Contact an admin to reset it.</p>
+        <div class="flex gap-2 justify-end">
+          <button type="button" onclick="hideLoginModal()" class="px-4 py-1 border rounded">Cancel</button>
+          <button type="submit" class="px-4 py-1 bg-[#0078d4] text-white rounded">Login</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
     <!-- Sign Up Modal -->
     <div id="signup-modal" onclick="if (event.target.id==='signup-modal') hideSignupModal()" 
          class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-[200]">
