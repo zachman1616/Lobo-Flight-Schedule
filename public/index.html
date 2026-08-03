@@ -1317,6 +1317,8 @@ function updateAuthUI() {
   if (isLoggedIn) {
     if (loginBtn) loginBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'inline';
+    const profileBtn = document.getElementById('profile-btn');
+    if (profileBtn) profileBtn.disabled = false;
     signupBtns.forEach(b => { if (b.closest('.fly-header')) b.style.display = 'none'; });
     if (loggedInUser.role === 'admin' && document.getElementById('manage-users-btn')) {
       document.getElementById('manage-users-btn').style.display = 'inline';
@@ -1324,6 +1326,8 @@ function updateAuthUI() {
       document.getElementById('manage-users-btn').style.display = 'none';
     }
   } else {
+  const profileBtn = document.getElementById('profile-btn');
+    if (profileBtn) profileBtn.disabled = true;
     if (userSelect) userSelect.style.display = 'none';
     if (loginBtn) loginBtn.style.display = 'inline';
     if (logoutBtn) logoutBtn.style.display = 'none';
