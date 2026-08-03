@@ -184,7 +184,50 @@ app.get('/api/auth/me', (req, res) => {
     status: user.status
   });
 });
+app.patch('/api/auth/me', requireAuth, (req, res) => {
+  const { rank, firstName, lastName, email, password } = req.body;
+  const userId = req.session.userId;
 
+  if (email) {
+    const taken = db.prepare('SELECT id FROM users WHERE email = ? AND id != ?')
+      .get(email.toLowerCase().trim(), userId);
+    if (taken) return res.status(409).json({ error: 'Email already in use' });
+  }
+
+  const current = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+  if (!current) return res.status(404).json({ error: 'User not found' });
+
+  const newRank = rank != null ? rank : current.rank;
+  const newFirst = firstName != null ? firstName.trim() : current.first_name;
+  const newLast = lastName != null ? lastName.trim() : current.last_name;
+  const newEmail = email != null ? email.toLowerCase().trim() : current.email;
+  const newUsername = `${newRank} ${newFirst} ${newLast}`.trim();
+
+  const nameTaken = db.prepare('SELECT id FROM users WHERE username = ? AND id != ?')
+    .get(newUsername, userId);
+  if (nameTaken) return res.status(409).json({ error: 'That name is already taken' });
+
+  if (password && password.length >= 6) {
+    const hash = bcrypt.hashSync(password, 12);
+    db.prepare(`UPDATE users SET rank=?, first_name=?, last_name=?, email=?, username=?, password_hash=?, updated_at=datetime('now') WHERE id=?`)
+      .run(newRank, newFirst, newLast, newEmail, newUsername, hash, userId);
+  } else {
+    db.prepare(`UPDATE users SET rank=?, first_name=?, last_name=?, email=?, username=?, updated_at=datetime('now') WHERE id=?`)
+      .run(newRank, newFirst, newLast, newEmail, newUsername, userId);
+  }
+
+  const updated = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+  res.json({
+    id: updated.id,
+    username: updated.username,
+    email: updated.email,
+    role: updated.role,
+    rank: updated.rank,
+    firstName: updated.first_name,
+    lastName: updated.last_name,
+    status: updated.status
+  });
+});
 // ========== USER MANAGEMENT (Admin) ==========
 // ========== USER MANAGEMENT ==========
 // Approved users list (any logged-in user — for crew dropdowns)
