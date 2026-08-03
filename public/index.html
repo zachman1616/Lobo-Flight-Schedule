@@ -1386,44 +1386,72 @@ async function showManageUsersModal() {
   modal.classList.add('flex');
 
   try {
-    const pending = await API.getPendingUsers();
+    const allUsers = await API.getUsers();
     list.innerHTML = '';
-    if (!pending.length) {
+    if (!allUsers.length) {
+      noPending.textContent = 'No users yet.';
       noPending.classList.remove('hidden');
       return;
     }
-    pending.forEach(user => {
+    allUsers.forEach(user => {
       const div = document.createElement('div');
-      div.className = 'flex justify-between items-center bg-gray-50 p-2 rounded text-xs gap-2';
+      div.className = 'flex justify-between items-start bg-gray-50 p-2 rounded text-xs gap-2';
       const displayName = user.rank && user.first_name
         ? `${user.rank} ${user.first_name} ${user.last_name || ''}`.trim()
         : user.username;
+      const statusColor = user.status === 'approved' ? 'text-green-700'
+        : user.status === 'pending' ? 'text-yellow-700' : 'text-red-700';
+
+      let actionBtns = '';
+      if (user.status === 'pending') {
+        actionBtns += `<button class="px-2 py-1 bg-green-600 text-white rounded approve-btn">Approve</button>`;
+        actionBtns += `<button class="px-2 py-1 bg-yellow-600 text-white rounded reject-btn">Reject</button>`;
+      }
+      actionBtns += `<button class="px-2 py-1 bg-gray-600 text-white rounded reset-btn">Reset PW</button>`;
+      actionBtns += `<button class="px-2 py-1 bg-red-700 text-white rounded delete-btn">Delete</button>`;
+
       div.innerHTML = `
         <div class="min-w-0">
-          <strong>${displayName}</strong> (${user.email})
+          <strong>${displayName}</strong><br>
+          <span class="text-gray-500">${user.email}</span><br>
+          <span class="${statusColor}">${user.status}</span> · ${user.role}
         </div>
-        <div class="flex gap-1 shrink-0">
-          <button class="px-2 py-1 bg-green-600 text-white rounded approve-btn">Approve</button>
-          <button class="px-2 py-1 bg-red-600 text-white rounded reject-btn">Reject</button>
-          <button class="px-2 py-1 bg-gray-600 text-white rounded reset-btn">Reset PW</button>
-        </div>
+        <div class="flex flex-wrap gap-1 shrink-0 justify-end">${actionBtns}</div>
       `;
-      div.querySelector('.approve-btn').onclick = async () => {
-        await API.setUserStatus(user.id, 'approved');
-        alert('Approved ' + displayName);
-        showManageUsersModal();
-        if (typeof renderAll === 'function') renderAll();
-      };
-      div.querySelector('.reject-btn').onclick = async () => {
-        await API.setUserStatus(user.id, 'rejected');
-        alert('Rejected ' + displayName);
-        showManageUsersModal();
-      };
+
+      const approveBtn = div.querySelector('.approve-btn');
+      if (approveBtn) {
+        approveBtn.onclick = async () => {
+          await API.setUserStatus(user.id, 'approved');
+          await refreshApprovedUsersCache();
+          alert('Approved ' + displayName);
+          showManageUsersModal();
+        };
+      }
+      const rejectBtn = div.querySelector('.reject-btn');
+      if (rejectBtn) {
+        rejectBtn.onclick = async () => {
+          await API.setUserStatus(user.id, 'rejected');
+          alert('Rejected ' + displayName);
+          showManageUsersModal();
+        };
+      }
       div.querySelector('.reset-btn').onclick = async () => {
         const pw = prompt('New password for ' + displayName + ' (min 6 chars):');
         if (!pw || pw.length < 6) return;
         await API.setUserPassword(user.id, pw);
         alert('Password reset for ' + displayName);
+      };
+      div.querySelector('.delete-btn').onclick = async () => {
+        if (!confirm('Delete ' + displayName + '?')) return;
+        try {
+          await API.deleteUser(user.id);
+          await refreshApprovedUsersCache();
+          alert('Deleted ' + displayName);
+          showManageUsersModal();
+        } catch (err) {
+          alert(err.message);
+        }
       };
       list.appendChild(div);
     });
@@ -1431,14 +1459,6 @@ async function showManageUsersModal() {
     list.innerHTML = '<div class="text-red-600 text-xs">' + err.message + '</div>';
   }
 }
-
-function hideManageUsersModal() {
-  const modal = document.getElementById('manage-users-modal');
-  modal.classList.remove('flex');
-  modal.classList.add('hidden');
-}
-
-
 function approveUser() {
   // handled inside showManageUsersModal via API
 }
@@ -1450,14 +1470,7 @@ function approveUser() {
         const users = [];
 
         // Enhanced crew for Standardization (Stands) - can be updated from CAFRS
-        let crew = [
-            { id: 'c1', name: 'CPT Maria Salas', role: 'Pilot', rl: 'RL1', status: 'Current', totalHours: 2450, ngHours: 820, nvgCurrent: true, academics: 95, apart: 'Complete' },
-            { id: 'c2', name: 'WO1 Zachary Cunha', role: 'Pilot', rl: 'RL1', status: 'Current', totalHours: 1180, ngHours: 310, nvgCurrent: true, academics: 88, apart: 'In Progress' },
-            { id: 'c3', name: 'CW3 James Torres', role: 'Pilot', rl: 'RL2', status: 'Current', totalHours: 1875, ngHours: 720, nvgCurrent: false, academics: 100, apart: 'Complete' },
-            { id: 'c4', name: 'SGT Lena Park', role: 'Crew Chief', rl: 'RL1', status: 'Current', totalHours: 980, ngHours: 210, nvgCurrent: true, academics: 72, apart: 'Pending' },
-            { id: 'c5', name: 'SPC Ramirez', role: 'Medic', rl: 'RL3', status: 'Current', totalHours: 540, ngHours: 95, nvgCurrent: true, academics: 60, apart: 'Complete' },
-            { id: 'c6', name: 'CPT David Ruiz', role: 'Pilot', rl: 'RL1', status: 'Current', totalHours: 2100, ngHours: 650, nvgCurrent: true, academics: 100, apart: 'Complete' }
-        ];
+        let crew = [ ];
 
         function saveCrew() {
             localStorage.setItem('flyarmy_crew_cafrs', JSON.stringify(crew));
