@@ -1303,8 +1303,12 @@ function openScheduler() {
   updateFlightActionLabel();
   populateAircraftTypeFilter();
   bindFilterControls();
+    currentWeekStart = new Date();
+  currentWeekStart.setDate(1);
+  currentWeekStart.setHours(0, 0, 0, 0);
   showCalendar();
   renderAll();
+}
 }
 
 function updateAuthUI() {
