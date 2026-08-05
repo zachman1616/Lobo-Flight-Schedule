@@ -1472,6 +1472,7 @@ async function performSignup(e) {
   const lastName = document.getElementById('signup-lastname').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
+  const role = document.getElementById('signup-role').value;
 
   if (!rank || !firstName || !lastName || !email || !password) {
     alert('Please fill out Rank, First Name, Last Name, Email and Password.');
