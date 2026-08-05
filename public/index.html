@@ -1159,7 +1159,9 @@
 
     <script>
         // Core data and state
-        let currentWeekStart = new Date('2026-07-06');
+        let currentWeekStart = new Date();
+currentWeekStart.setDate(1);
+currentWeekStart.setHours(0, 0, 0, 0);
         let currentUserId = 'u2';
 
 // ========== REAL BACKEND AUTH (server-side bcrypt + sessions) ==========
