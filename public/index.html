@@ -1069,8 +1069,13 @@
                         <label class="text-xs block text-gray-600">Password</label>
                         <input type="password" id="signup-password" class="border w-full rounded p-1.5 text-sm" required minlength="6">
                     </div>
-                    
-                </div>
+                                        <div>
+                        <label class="text-xs block text-gray-600">Account Type</label>
+                        <select id="signup-role" class="border w-full rounded p-1.5 text-sm" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
                 
                 <div class="p-3 bg-gray-50 border-t flex gap-2 justify-end text-xs">
                     <button type="button" onclick="hideSignupModal()" class="px-4 py-1 border rounded">Cancel</button>
