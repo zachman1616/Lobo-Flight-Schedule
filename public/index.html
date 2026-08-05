@@ -1482,7 +1482,7 @@ async function performSignup(e) {
   const username = `${rank} ${firstName} ${lastName}`;
 
   try {
-    await signupUser(username, email, password, 'user', rank, firstName, lastName);
+    await signupUser(username, email, password, role, rank, firstName, lastName);
     hideSignupModal();
     alert('Account created successfully! Awaiting admin approval before you can access the schedule.');
     setTimeout(showLoginModal, 300);
