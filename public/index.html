@@ -1311,6 +1311,7 @@ async function openScheduler() {
     currentWeekStart = new Date();
   currentWeekStart.setDate(1);
   currentWeekStart.setHours(0, 0, 0, 0);
+  await loadData();
   showCalendar();
   renderAll();
 }
