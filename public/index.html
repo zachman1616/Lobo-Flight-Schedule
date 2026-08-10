@@ -1504,6 +1504,7 @@ async function showManageUsersModal() {
   noPending.classList.add('hidden');
   modal.classList.remove('hidden');
   modal.classList.add('flex');
+  modal.style.cssText = 'display:flex !important; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.4);';
 
   try {
     const allUsers = await API.getUsers();
