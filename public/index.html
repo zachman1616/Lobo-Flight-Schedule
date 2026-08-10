@@ -1450,9 +1450,6 @@ async function performLogin() {
     await refreshApprovedUsersCache();
     showHomePage();
     renderAll();
-  } catch (err) {
-    alert(err.message);
-  }
 }
 
 function showSignupModal() {
