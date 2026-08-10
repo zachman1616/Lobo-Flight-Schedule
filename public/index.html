@@ -1451,8 +1451,10 @@ async function performLogin() {
     await refreshApprovedUsersCache();
     showHomePage();
     renderAll();
+  } catch (err) {
+    alert(err.message);
+  }
 }
-
 function showSignupModal() {
   const modal = document.getElementById('signup-modal');
   modal.classList.remove('hidden');
