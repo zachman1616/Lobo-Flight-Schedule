@@ -1498,6 +1498,7 @@ async function showManageUsersModal() {
     return;
   }
   const modal = document.getElementById('manage-users-modal');
+  document.body.appendChild(modal);
   const list = document.getElementById('pending-users-list');
   const noPending = document.getElementById('no-pending');
 
