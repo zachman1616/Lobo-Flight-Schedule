@@ -1739,10 +1739,6 @@ function approveUser() {
                 if (!f.aircraftEvent) f.aircraftEvent = f.aircraft_event || '';
                 if (!f.generalEvent) f.generalEvent = f.general_event || '';
             });
-        }
-            // Fallback defaults if empty
-            if (!flights || !flights.length) {
-                flights = [];
             }
             if (!aircraftList || !aircraftList.length) {
                 aircraftList = [
