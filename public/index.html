@@ -1488,7 +1488,6 @@ async function performSignup(e) {
     setTimeout(showLoginModal, 300);
   } catch (err) {
     alert(err.message);
-  }
 }
 async function showManageUsersModal() {
   if (!loggedInUser || loggedInUser.role !== 'admin') {
