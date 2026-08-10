@@ -1377,8 +1377,9 @@ function showProfileModal() {
   document.getElementById('profile-role').value = loggedInUser.role || '';
   document.getElementById('profile-password').value = '';
   const modal = document.getElementById('profile-modal');
+  document.body.appendChild(modal);
   modal.classList.remove('hidden');
-  modal.style.cssText = 'display:flex !important; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.4);';
+  modal.style.cssText = 'display:flex !important; position:fixed !important; top:0 !important; left:0 !important; width:100vw !important; height:100vh !important; z-index:99999 !important; align-items:center; justify-content:center; background:rgba(0,0,0,0.5) !important;';
 }
 
 function hideProfileModal() {
