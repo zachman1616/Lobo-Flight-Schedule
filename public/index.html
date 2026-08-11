@@ -1243,6 +1243,14 @@ function isUserApproved() {
 function isCurrentUserAdmin() {
   return !!(loggedInUser && loggedInUser.role === 'admin');
 }
+function getFlightActionText() {
+  return isCurrentUserAdmin() ? 'Schedule Flight' : 'Request Flight';
+}
+function updateFlightActionLabel() {
+  const btn = document.getElementById('flight-action-btn');
+  if (!btn) return;
+  btn.textContent = getFlightActionText();
+}
 function updateHomeActions() {
   const subtitle = document.getElementById('home-subtitle');
   const actions = document.getElementById('home-actions');
