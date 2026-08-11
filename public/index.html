@@ -1681,18 +1681,20 @@ function approveUser() {
             return loggedInUser && loggedInUser.role === 'admin';
         }
 
-        function getFlightActionText() {
-            return isCurrentUserAdmin() ? 'Schedule Flight' : 'Request Flight';
-        }
+       function isCurrentUserAdmin() {
+  return !!(loggedInUser && loggedInUser.role === 'admin');
+}
+function getFlightActionText() {
+  return isCurrentUserAdmin() ? 'Schedule Flight' : 'Request Flight';
+}
 
-       function updateFlightActionLabel() {
+function updateFlightActionLabel() {
   const btn = document.getElementById('flight-action-btn');
   if (!btn) return;
-  const isAdmin = typeof isCurrentUserAdmin === 'function'
-    ? isCurrentUserAdmin()
-    : !!(loggedInUser && loggedInUser.role === 'admin');
-  btn.textContent = isAdmin ? 'Schedule Flight' : 'Request Flight';
+  btn.textContent = getFlightActionText();
 }
+
+async function loadData() {
     
                 async function loadData() {
             // Try to load shared data from the real backend
