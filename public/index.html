@@ -1738,37 +1738,6 @@ function approveUser() {
                 if (!f.generalEvent) f.generalEvent = f.general_event || '';
             });
         }
-            if (!aircraftList || !aircraftList.length) {
-                aircraftList = [
-                    { id: 'a1', tail: '059', type: 'UH-60L', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a2', tail: '486', type: 'UH-60L', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a3', tail: '061', type: 'UH-60L', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a4', tail: '262', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a5', tail: '264', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a6', tail: '269', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a7', tail: '272', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a8', tail: '295', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' },
-                    { id: 'a9', tail: '297', type: 'HH-60M', status: 'Ready', hours: 0, notes: '' }
-                ];
-            }
-
-            // Keep some non-critical local data for now
-            const savedAftp = localStorage.getItem('flyarmy_aftp_v2');
-            aftpRequests = savedAftp ? JSON.parse(savedAftp) : [];
-            const savedTasks = localStorage.getItem('flyarmy_stands_tasks');
-            standTasks = savedTasks ? JSON.parse(savedTasks) : [];
-
-            loadCrewFromStorage();
-
-            flights.forEach(f => {
-                if (f.nrcm != null && !Array.isArray(f.nrcm)) f.nrcm = [f.nrcm];
-                if (f.mo != null && !Array.isArray(f.mo)) f.mo = [f.mo];
-                if (!f.nrcm) f.nrcm = [];
-                if (!f.mo) f.mo = [];
-                if (!f.aircraftEvent) f.aircraftEvent = f.aircraft_event || '';
-                if (!f.generalEvent) f.generalEvent = f.general_event || '';
-            });
-        }
 
         async function saveFlights() {
             // Primary: persist the last-changed flight via API when possible
