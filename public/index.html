@@ -1693,9 +1693,7 @@ function approveUser() {
     : !!(loggedInUser && loggedInUser.role === 'admin');
   btn.textContent = isAdmin ? 'Schedule Flight' : 'Request Flight';
 }
-            }
-        }
-
+    
                 async function loadData() {
             // Try to load shared data from the real backend
             try {
