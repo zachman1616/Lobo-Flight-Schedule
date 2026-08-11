@@ -1684,25 +1684,6 @@ function approveUser() {
             // Fallback if no login (shouldn't happen)
             return { id: 'none', name: 'Not logged in', role: 'User', isAdmin: false };
         }
-
-        function isCurrentUserAdmin() {
-            return loggedInUser && loggedInUser.role === 'admin';
-        }
-
-       function isCurrentUserAdmin() {
-  return !!(loggedInUser && loggedInUser.role === 'admin');
-}
-function getFlightActionText() {
-  return isCurrentUserAdmin() ? 'Schedule Flight' : 'Request Flight';
-}
-
-function updateFlightActionLabel() {
-  const btn = document.getElementById('flight-action-btn');
-  if (!btn) return;
-  btn.textContent = getFlightActionText();
-}
-
-async function loadData() {
     
                 async function loadData() {
             // Try to load shared data from the real backend
