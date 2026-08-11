@@ -1686,7 +1686,7 @@ function approveUser() {
             return { id: 'none', name: 'Not logged in', role: 'User', isAdmin: false };
         }
     
-                async function loadData() {
+                        async function loadData() {
             // Try to load shared data from the real backend
             try {
                 if (loggedInUser) {
@@ -1737,7 +1737,7 @@ function approveUser() {
                 if (!f.aircraftEvent) f.aircraftEvent = f.aircraft_event || '';
                 if (!f.generalEvent) f.generalEvent = f.general_event || '';
             });
-            }
+        }
             if (!aircraftList || !aircraftList.length) {
                 aircraftList = [
                     { id: 'a1', tail: '059', type: 'UH-60L', status: 'Ready', hours: 0, notes: '' },
