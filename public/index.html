@@ -1685,10 +1685,14 @@ function approveUser() {
             return isCurrentUserAdmin() ? 'Schedule Flight' : 'Request Flight';
         }
 
-        function updateFlightActionLabel() {
-            const btn = document.getElementById('flight-action-btn');
-            if (btn) {
-                btn.textContent = getFlightActionText();
+       function updateFlightActionLabel() {
+  const btn = document.getElementById('flight-action-btn');
+  if (!btn) return;
+  const isAdmin = typeof isCurrentUserAdmin === 'function'
+    ? isCurrentUserAdmin()
+    : !!(loggedInUser && loggedInUser.role === 'admin');
+  btn.textContent = isAdmin ? 'Schedule Flight' : 'Request Flight';
+}
             }
         }
 
