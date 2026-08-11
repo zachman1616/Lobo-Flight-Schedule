@@ -3613,7 +3613,9 @@ async function refreshApprovedUsersCache() {
         }
 
         async function init() {
-            currentWeekStart = new Date('2026-07-06');
+            currentWeekStart = new Date();
+            currentWeekStart.setDate(1);
+            currentWeekStart.setHours(0, 0, 0, 0);
 
             // Restore session from server (cookie-based)
             try {
