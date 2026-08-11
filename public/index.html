@@ -1240,7 +1240,9 @@ async function logoutUser() {
 function isUserApproved() {
   return !!loggedInUser && (loggedInUser.status === 'approved' || !loggedInUser.status);
 }
-
+function isCurrentUserAdmin() {
+  return !!(loggedInUser && loggedInUser.role === 'admin');
+}
 function updateHomeActions() {
   const subtitle = document.getElementById('home-subtitle');
   const actions = document.getElementById('home-actions');
