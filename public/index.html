@@ -1428,13 +1428,10 @@ function showLoginModal() {
   const modal = document.getElementById('login-modal');
   modal.classList.remove('hidden');
   modal.classList.add('flex');
-  // Pre-fill test credentials for easy testing
-  setTimeout(() => {
-    const u = document.getElementById('login-username');
-    const p = document.getElementById('login-password');
-    if (u) u.value = 'test@example.com';
-    if (p) p.value = 'test123';
-  }, 50);
+  const u = document.getElementById('login-username');
+  const p = document.getElementById('login-password');
+  if (u) u.value = '';
+  if (p) p.value = '';
 }
 
 function hideLoginModal() {
