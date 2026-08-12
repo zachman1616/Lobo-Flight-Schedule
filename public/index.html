@@ -3017,14 +3017,21 @@ CPT David Ruiz,2155,680,true,100,Complete`;
             showAddModal(detailFlightId);
         }
 
-        function deleteCurrentFlight() {
-            if (!detailFlightId) return;
-            if (!confirm('Delete this flight?')) return;
-            flights = flights.filter(f => f.id !== detailFlightId);
-            saveFlights();
-            hideDetailModal();
-            renderAll();
-        }
+        async function deleteCurrentFlight() {
+    if (!detailFlightId) return;
+    if (!confirm('Delete this flight?')) return;
+    const idToDelete = detailFlightId;
+    try {
+        await API.deleteFlight(idToDelete);
+    } catch (err) {
+        alert('Could not delete on server: ' + err.message);
+        return;
+    }
+    flights = flights.filter(f => f.id !== idToDelete);
+    saveFlights();
+    hideDetailModal();
+    renderAll();
+}
 
         function populateAircraftSelect() {
             const sel = document.getElementById('flight-aircraft');
